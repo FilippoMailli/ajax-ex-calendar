@@ -23,26 +23,46 @@ $(document).ready(function() {
     var templateGiorno = Handlebars.compile(htmlGiorno);
 
     var dataIniziale = moment('2018-01-01');
+    var limiteIniziale = moment('2018-01-01');
+    var limiteFinale = moment('2018-12-31');
     stampaGiorniMese(dataIniziale);
-    stampaFestivi();
+    stampaFestivi(dataIniziale);
 
     $('.mese-succ').click(function () {
-        dataIniziale.add(1, 'month');
-        stampaGiorniMese(dataIniziale);
+        $('.mese-prec').prop('disabled', false);
+        if(dataIniziale.isSameOrAfter(limiteFinale, 'month')) {
+            alert('Hai provato ad hackerarmi...')
+        } else {
+            dataIniziale.add(1, 'month');
+            stampaGiorniMese(dataIniziale);
+            stampaFestivi(dataIniziale);
+            if(dataIniziale.isSameOrAfter(limiteFinale, 'month')) {
+                $('.mese-succ').prop('disabled', true);
+            }
+        }
     });
 
     $('.mese-prec').click(function () {
-        dataIniziale.subtract(1, 'month');
-        stampaGiorniMese(dataIniziale);
+        $('.mese-succ').prop('disabled', false);
+        if(dataIniziale.isSameOrBefore(limiteIniziale)) {
+            alert('Hai provato ad hackerarmi...')
+        } else {
+            dataIniziale.subtract(1, 'month');
+            stampaGiorniMese(dataIniziale);
+            stampaFestivi(dataIniziale);
+            if(dataIniziale.isSameOrBefore(limiteIniziale)) {
+                $('.mese-prec').prop('disabled', true);
+            }
+        }
     });
 
-    function stampaFestivi() {
+    function stampaFestivi(meseCorrente) {
         $.ajax({
             url: 'https://flynn.boolean.careers/exercises/api/holidays',
             method: 'GET',
             data: {
-                year: 2018,
-                month: 0
+                year: meseCorrente.year(),
+                month: meseCorrente.month()
             },
             success: function(data) {
                 var giorniFestivi = data.response;
@@ -57,10 +77,12 @@ $(document).ready(function() {
     }
 
     function stampaGiorniMese(meseDaStampare) {
-        $('#calendar').empty();
+        $('.giornoDelMese').remove();
         var standardDay = meseDaStampare.clone();
         var giorniMese = meseDaStampare.daysInMonth();
         var nomeMese = meseDaStampare.format('MMMM');
+        var inizioSettimana = meseDaStampare.format("d");
+        console.log(inizioSettimana);
         $('#nome-mese').text(nomeMese);
 
         for (var i = 1; i <= giorniMese; i++) {

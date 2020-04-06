@@ -10,8 +10,7 @@
     display: table;
 }
 
-.top-calendar,
-.main-calendar {
+.top-calendar {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -26,4 +25,45 @@
 
 .festivo {
     color: red;
+}
+
+.btn-navigation {
+    padding: 5px 20px;
+    border-radius: 5px;
+    background-color: green;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-navigation:disabled {
+    background-color: lightgray;
+    color: black;
+    cursor:not-allowed;
+}
+
+.main-calendar {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
+
+#calendar {
+    width: 60%;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.giornoDelMese,
+.skippaUno {
+    width: calc(100% / 7);
+    height: 100px;
+    border: 1px solid black;
+    list-style-type: none;
+    font-size: 16px;
+    padding: 3px;
 }
