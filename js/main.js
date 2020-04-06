@@ -78,12 +78,16 @@ $(document).ready(function() {
 
     function stampaGiorniMese(meseDaStampare) {
         $('.giornoDelMese').remove();
+        $('.skippaUno').remove();
         var standardDay = meseDaStampare.clone();
         var giorniMese = meseDaStampare.daysInMonth();
         var nomeMese = meseDaStampare.format('MMMM');
-        var inizioSettimana = meseDaStampare.format("d");
-        console.log(inizioSettimana);
+        var inizioSettimana = meseDaStampare.isoWeekday();
         $('#nome-mese').text(nomeMese);
+
+        for (var x = 1; x < inizioSettimana; x++) {
+            $('#calendar').append('<li class="skippaUno"></li>');
+        }
 
         for (var i = 1; i <= giorniMese; i++) {
             var giornoDaInserire = {
